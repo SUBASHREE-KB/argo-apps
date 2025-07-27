@@ -1,6 +1,11 @@
 controller:
   adminPassword: "admin123"
   serviceType: LoadBalancer
+  persistence:
+    enabled: true
+    storageClass: "gp2"     # ✅ Explicitly set this
+    size: "8Gi"
+    accessMode: "ReadWriteOnce"
   resources:
     requests:
       cpu: "100m"
