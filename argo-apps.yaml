@@ -12,9 +12,26 @@ spec:
     helm:
       values: |
         controller:
-          adminPassword: "admin123"
+          admin:
+            password: "admin123"
           serviceType: LoadBalancer
-        agent: {}
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+        agent:
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+          containerSecurityContext:
+            allowPrivilegeEscalation: false
   destination:
     server: https://kubernetes.default.svc
     namespace: jenkins
@@ -24,7 +41,6 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-
 
 ---
 apiVersion: argoproj.io/v1alpha1
