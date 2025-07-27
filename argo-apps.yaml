@@ -12,21 +12,13 @@ spec:
     helm:
       values: |
         controller:
-          admin:
-            password: "admin123"
+          adminPassword: "admin123"
           serviceType: LoadBalancer
-                    persistence:
-            enabled: true
-            storageClass: "gp2"
-            size: "8Gi"
-            accessMode: "ReadWriteOnce"
-
           persistence:
             enabled: true
             storageClass: "gp2"
             size: "8Gi"
             accessMode: "ReadWriteOnce"
-
           resources:
             requests:
               cpu: "100m"
