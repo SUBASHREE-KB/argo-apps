@@ -116,7 +116,7 @@ spec:
   source:
     repoURL: https://kyverno.github.io/kyverno/
     chart: kyverno
-    targetRevision: 3.1.4
+    targetRevision: 3.0.5
     helm:
       values: |
         replicaCount: 1
@@ -127,18 +127,15 @@ spec:
           limits:
             cpu: "200m"
             memory: "256Mi"
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 10001
-          fsGroup: 10001
-        containerSecurityContext:
-          runAsNonRoot: true
-          runAsUser: 10001
-          readOnlyRootFilesystem: true
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-              - ALL
+        crds:
+          install: true
+        config:
+          webhooks:
+            - namespaceSelector:
+                matchExpressions:
+                - key: name
+                  operator: NotIn
+                  values: [kube-system, argocd]
   destination:
     server: https://kubernetes.default.svc
     namespace: kyverno
@@ -148,6 +145,7 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - Replace=true
 
 ---
 apiVersion: argoproj.io/v1alpha1
