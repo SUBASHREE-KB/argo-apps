@@ -2,11 +2,31 @@ service:
   type: LoadBalancer
 
 resources:
+  requests:
+    cpu: "200m"
+    memory: "512Mi"
   limits:
-    cpu: "500m"
-    memory: "1Gi"
+    cpu: "800m"
+    memory: "2Gi"
+
+securityContext:
+  fsGroup: 1000
+
+containerSecurityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
 
 postgresql:
   enabled: true
   auth:
     postgresPassword: "sonar123"
+  primary:
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+      limits:
+        cpu: "300m"
+        memory: "512Mi"

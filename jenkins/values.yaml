@@ -2,8 +2,4 @@ controller:
   adminPassword: "admin123"
   serviceType: LoadBalancer
 
-agent:
-  resources:
-    limits:
-      cpu: "200m"
-      memory: "256Mi"
+agent: {}
