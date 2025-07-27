@@ -6,12 +6,38 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://charts.bitnami.com/bitnami
+    repoURL: https://charts.jenkins.io
     chart: jenkins
-    targetRevision: 12.2.4
+    targetRevision: 5.1.9
     helm:
-      valueFiles:
-        - values.yaml
+      values: |
+        controller:
+          adminPassword: "admin123"
+          serviceType: LoadBalancer
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          containerSecurityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            readOnlyRootFilesystem: false
+            allowPrivilegeEscalation: false
+        agent:
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
   destination:
     server: https://kubernetes.default.svc
     namespace: jenkins
@@ -19,6 +45,8 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
 
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -29,12 +57,39 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://charts.bitnami.com/bitnami
+    repoURL: https://SonarSource.github.io/helm-chart-sonarqube
     chart: sonarqube
-    targetRevision: 8.1.12
+    targetRevision: 10.4.1
     helm:
-      valueFiles:
-        - values.yaml
+      values: |
+        service:
+          type: LoadBalancer
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "512Mi"
+          limits:
+            cpu: "800m"
+            memory: "2Gi"
+        securityContext:
+          fsGroup: 1000
+        containerSecurityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+          readOnlyRootFilesystem: false
+          allowPrivilegeEscalation: false
+        postgresql:
+          enabled: true
+          auth:
+            postgresPassword: "sonar123"
+          primary:
+            resources:
+              requests:
+                cpu: "100m"
+                memory: "256Mi"
+              limits:
+                cpu: "300m"
+                memory: "512Mi"
   destination:
     server: https://kubernetes.default.svc
     namespace: sonarqube
@@ -42,6 +97,8 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
 
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -55,6 +112,30 @@ spec:
     repoURL: https://kyverno.github.io/kyverno/
     chart: kyverno
     targetRevision: 3.1.4
+    helm:
+      values: |
+        replicaCount: 1
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 10001
+          fsGroup: 10001
+          seccompProfile:
+            type: RuntimeDefault
+        containerSecurityContext:
+          runAsNonRoot: true
+          runAsUser: 10001
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
   destination:
     server: https://kubernetes.default.svc
     namespace: kyverno
@@ -62,6 +143,8 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
 
 ---
 apiVersion: argoproj.io/v1alpha1
