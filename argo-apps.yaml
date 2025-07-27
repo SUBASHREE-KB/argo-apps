@@ -12,7 +12,8 @@ spec:
     helm:
       values: |
         controller:
-          adminPassword: "admin123"
+          admin:
+            Password: "admin123"
           serviceType: LoadBalancer
           persistence:
             enabled: true
