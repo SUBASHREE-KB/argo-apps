@@ -31,7 +31,7 @@ spec:
   source:
     repoURL: https://charts.bitnami.com/bitnami
     chart: sonarqube
-    targetRevision: 10.0.2
+    targetRevision: 8.1.12
     helm:
       valueFiles:
         - values.yaml
