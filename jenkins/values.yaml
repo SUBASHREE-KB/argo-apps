@@ -17,6 +17,9 @@ controller:
     limits:
       cpu: "500m"
       memory: "512Mi"
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
 
 agent:
   containerSecurityContext:
