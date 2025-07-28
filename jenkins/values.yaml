@@ -13,15 +13,16 @@ controller:
   resources:
     requests:
       cpu: "100m"
-      memory: "256Mi"
+      memory: "128Mi"
     limits:
-      cpu: "500m"
-      memory: "512Mi"
+      cpu: "200m"
+      memory: "256Mi"
   containerSecurityContext:
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
 
 agent:
+  persistentWorkspace: false
   containerSecurityContext:
     allowPrivilegeEscalation: false
     seccompProfile:
