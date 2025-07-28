@@ -185,7 +185,7 @@ spec:
   source:
     repoURL: https://github.com/SUBASHREE-KB/argo-apps.git
     path: argocd-apps/kyverno-policies
-    targetRevision: HEAD
+    targetRevision: 3.1.4
   destination:
     server: https://kubernetes.default.svc
     namespace: kyverno
