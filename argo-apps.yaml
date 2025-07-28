@@ -13,7 +13,7 @@ spec:
       values: |
         controller:
           admin:
-            Password: "admin123"
+            password: "admin123"
           serviceType: LoadBalancer
           persistence:
             enabled: true
