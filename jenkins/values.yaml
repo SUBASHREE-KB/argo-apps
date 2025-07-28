@@ -7,7 +7,7 @@ controller:
       type: RuntimeDefault
   persistence:
     enabled: true
-    storageClass: "gp2"
+    storageClass: "gp2-csi"
     size: "8Gi"
     accessMode: "ReadWriteOnce"
   resources:
