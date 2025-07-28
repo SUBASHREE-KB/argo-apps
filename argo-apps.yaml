@@ -10,33 +10,8 @@ spec:
     chart: jenkins
     targetRevision: 5.1.9
     helm:
-      values: |
-        controller:
-          admin:
-            password: "admin123"
-          serviceType: LoadBalancer
-          persistence:
-            enabled: false
-            # storageClass: "gp2"
-            # size: "8Gi"
-            # accessMode: "ReadWriteOnce"
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "256Mi"
-            limits:
-              cpu: "500m"
-              memory: "512Mi"
-        agent:
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "128Mi"
-            limits:
-              cpu: "200m"
-              memory: "256Mi"
-          containerSecurityContext:
-            allowPrivilegeEscalation: false
+      valueFiles:
+        - jenkins/values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: jenkins
@@ -46,6 +21,7 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+
 
 ---
 apiVersion: argoproj.io/v1alpha1

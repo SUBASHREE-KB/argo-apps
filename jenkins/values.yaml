@@ -2,11 +2,14 @@ controller:
   admin:
     password: "admin123"
   serviceType: LoadBalancer
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
   persistence:
-    enabled: false
-    # storageClass: "gp2"     # ✅ Explicitly set this
-    # size: "8Gi"
-    # accessMode: "ReadWriteOnce"
+    enabled: true
+    storageClass: "gp2"
+    size: "8Gi"
+    accessMode: "ReadWriteOnce"
   resources:
     requests:
       cpu: "100m"
@@ -14,10 +17,12 @@ controller:
     limits:
       cpu: "500m"
       memory: "512Mi"
-    readOnlyRootFilesystem: false
-    allowPrivilegeEscalation: false
 
 agent:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
   resources:
     requests:
       cpu: "100m"
