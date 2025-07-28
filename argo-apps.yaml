@@ -16,10 +16,10 @@ spec:
             password: "admin123"
           serviceType: LoadBalancer
           persistence:
-            enabled: true
-            storageClass: "gp2"
-            size: "8Gi"
-            accessMode: "ReadWriteOnce"
+            enabled: false
+            # storageClass: "gp2"
+            # size: "8Gi"
+            # accessMode: "ReadWriteOnce"
           resources:
             requests:
               cpu: "100m"
