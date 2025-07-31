@@ -2,14 +2,24 @@ controller:
   admin:
     password: "admin123"
   serviceType: LoadBalancer
+
   podSecurityContext:
+    runAsUser: 1000
+    fsGroup: 1000
     seccompProfile:
       type: RuntimeDefault
+
   persistence:
     enabled: true
     storageClass: "gp2"
     size: "8Gi"
     accessMode: "ReadWriteOnce"
+
+  containerSecurityContext:
+    runAsUser: 1000
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false   # Must be false for Jenkins init
+
   resources:
     requests:
       cpu: "100m"
@@ -17,14 +27,12 @@ controller:
     limits:
       cpu: "200m"
       memory: "256Mi"
-  containerSecurityContext:
-    readOnlyRootFilesystem: true
-    allowPrivilegeEscalation: false
 
 agent:
   persistentWorkspace: false
   containerSecurityContext:
     allowPrivilegeEscalation: false
+    runAsUser: 1000
     seccompProfile:
       type: RuntimeDefault
   resources:
