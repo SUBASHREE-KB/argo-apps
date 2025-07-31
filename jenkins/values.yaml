@@ -2,39 +2,14 @@ controller:
   admin:
     password: "admin123"
   serviceType: LoadBalancer
-  tag: "2.454"  # or latest LTS
-
   podSecurityContext:
-    runAsUser: 1000
-    fsGroup: 1000
     seccompProfile:
       type: RuntimeDefault
-
-  containerSecurityContext:
-    runAsUser: 1000
-    allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false  # Jenkins init requires this to be false
-
-  # Add resources to avoid Kyverno violations on init containers
-  initContainers:
-    - name: config-reload-init
-      image: kiwigrid/k8s-sidecar:1.24.1
-      resources:
-        requests:
-          cpu: 50m
-          memory: 128Mi
-        limits:
-          cpu: 100m
-          memory: 256Mi
-      # keep your other config as-is
-
-
   persistence:
     enabled: true
-    storageClass: gp2
-    accessMode: ReadWriteOnce
-    size: 8Gi
-
+    storageClass: "gp2-csi"
+    size: "8Gi"
+    accessMode: "ReadWriteOnce"
   resources:
     requests:
       cpu: "100m"
@@ -42,12 +17,14 @@ controller:
     limits:
       cpu: "200m"
       memory: "256Mi"
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
 
 agent:
   persistentWorkspace: false
   containerSecurityContext:
     allowPrivilegeEscalation: false
-    runAsUser: 1000
     seccompProfile:
       type: RuntimeDefault
   resources:
