@@ -7,7 +7,7 @@ metadata:
     policies.kyverno.io/category: Pod Security Standards (Restricted)
     policies.kyverno.io/severity: medium
     policies.kyverno.io/description: >-
-      Privilege escalation should not be allowed in containers or initContainers.
+      Privilege escalation should not be allowed in containers, initContainers, or ephemeralContainers.
 spec:
   validationFailureAction: enforce
   background: true
@@ -20,19 +20,19 @@ spec:
             - Pod
       validate:
         message: "Privilege escalation is not allowed"
-        pattern:
-          spec:
-            =(securityContext):
-              =(allowPrivilegeEscalation): "false"
-            containers:
-              - name: "*"
-                =(securityContext):
-                  =(allowPrivilegeEscalation): "false"
-            initContainers:
-              - name: "*"
-                =(securityContext):
-                  =(allowPrivilegeEscalation): "false"
-            ephemeralContainers:
-              - name: "*"
-                =(securityContext):
-                  =(allowPrivilegeEscalation): "false"
+        anyPattern:
+          - spec:
+              containers:
+                - name: "*"
+                  securityContext:
+                    allowPrivilegeEscalation: false
+          - spec:
+              initContainers:
+                - name: "*"
+                  securityContext:
+                    allowPrivilegeEscalation: false
+          - spec:
+              ephemeralContainers:
+                - name: "*"
+                  securityContext:
+                    allowPrivilegeEscalation: false
