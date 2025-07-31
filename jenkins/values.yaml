@@ -2,6 +2,8 @@ controller:
   admin:
     password: "admin123"
   serviceType: LoadBalancer
+  tag: "2.454"  # or latest LTS
+
 
   podSecurityContext:
     runAsUser: 1000
