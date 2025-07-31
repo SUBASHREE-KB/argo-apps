@@ -26,6 +26,8 @@ spec:
             namespaces:
             - kube-system
             - argocd
+            - jenkins  # Added to exclude Jenkins namespace
+            - sonarqube
       validate:
         message: "CPU and memory limits must be set"
         pattern:
