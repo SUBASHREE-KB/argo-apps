@@ -16,13 +16,18 @@ controller:
     readOnlyRootFilesystem: false  # Jenkins init requires this to be false
 
   # Add resources to avoid Kyverno violations on init containers
-  initContainerResources:
-    requests:
-      cpu: "100m"
-      memory: "128Mi"
-    limits:
-      cpu: "200m"
-      memory: "256Mi"
+  initContainers:
+    - name: config-reload-init
+      image: kiwigrid/k8s-sidecar:1.24.1
+      resources:
+        requests:
+          cpu: 50m
+          memory: 128Mi
+        limits:
+          cpu: 100m
+          memory: 256Mi
+      # keep your other config as-is
+
 
   persistence:
     enabled: true
