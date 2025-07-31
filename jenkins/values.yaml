@@ -5,6 +5,23 @@ controller:
   podSecurityContext:
     seccompProfile:
       type: RuntimeDefault
+    sidecars:
+    configAutoReload:
+      resources:
+        requests:
+          cpu: "50m"
+          memory: "64Mi"
+        limits:
+          cpu: "100m"
+          memory: "128Mi"
+
+  initContainerResources:
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+    limits:
+      cpu: "100m"
+      memory: "128Mi"
   persistence:
     enabled: true
     storageClass: "gp2"
