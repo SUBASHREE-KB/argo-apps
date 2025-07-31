@@ -1,37 +1,30 @@
 controller:
   admin:
     password: "admin123"
-
   serviceType: LoadBalancer
-
   podSecurityContext:
     seccompProfile:
       type: RuntimeDefault
     fsGroup: 1000  # Ensures Jenkins can write to volumes
-
   containerSecurityContext:
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
-
   initContainerSecurityContext:
-    readOnlyRootFilesystem: false  # Init containers need write access
-
+    readOnlyRootFilesystem: false  # Required for init container write access
   resources:
     requests:
-      cpu: "100m"
-      memory: "128Mi"
+      cpu: "500m"  # Increased for better performance
+      memory: "512Mi"
     limits:
-      cpu: "200m"
-      memory: "256Mi"
-
+      cpu: "1000m"
+      memory: "1024Mi"
   initContainerResources:
     requests:
-      cpu: "50m"
-      memory: "64Mi"
+      cpu: "200m"  # Increased to ensure stability during plugin installation
+      memory: "256Mi"
     limits:
-      cpu: "100m"
-      memory: "128Mi"
-
+      cpu: "500m"
+      memory: "512Mi"
   sidecars:
     configAutoReload:
       resources:
@@ -41,22 +34,20 @@ controller:
         limits:
           cpu: "100m"
           memory: "128Mi"
-
   persistence:
     enabled: true
     storageClass: "gp2"
     accessMode: "ReadWriteOnce"
     size: "8Gi"
-
   installPlugins:
-    - kubernetes:4209.vc646b_71e5269
-    - workflow-aggregator:596.v8c21c963d92d
-    - git:5.2.1
-    - configuration-as-code:1836.vccda_4a_122a_a_e
-    - workflow-multibranch:783.787.v50539468395f
-    - cloudbees-folder:6.928.v7c780211d66e
-    - credentials-binding:687.vcb_e9cf2a_868c
-    - credentials:1389.v80b_b_b_a_492d4a
+    - kubernetes:4300.v3a_4b_20a_3807f  # Compatible with Jenkins 2.452.1+
+    - workflow-aggregator:600.vb_57d6b_5d6186  # Compatible version
+    - git:5.5.0  # Updated to latest stable version
+    - configuration-as-code:1836.vccda_4a_122a_a_e  # Required to resolve dependency issues
+    - workflow-multibranch:790.vf0e485d84a_9e  # Compatible with Jenkins 2.452.1+
+    - cloudbees-folder:7.0.0  # Compatible with Jenkins 2.452.1+
+    - credentials-binding:694.vf1a_0b_1a_2e66  # Updated to address SECURITY-3499
+    - credentials:1394.v5299747b_8a_3b_  # Updated to address SECURITY-3373
 
 agent:
   persistentWorkspace: false
