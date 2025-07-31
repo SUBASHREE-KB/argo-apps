@@ -1,11 +1,38 @@
 controller:
   admin:
     password: "admin123"
+
   serviceType: LoadBalancer
+
   podSecurityContext:
     seccompProfile:
       type: RuntimeDefault
-    sidecars:
+    fsGroup: 1000  # Ensures Jenkins can write to volumes
+
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+
+  initContainerSecurityContext:
+    readOnlyRootFilesystem: false  # Init containers need write access
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "200m"
+      memory: "256Mi"
+
+  initContainerResources:
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+    limits:
+      cpu: "100m"
+      memory: "128Mi"
+
+  sidecars:
     configAutoReload:
       resources:
         requests:
@@ -15,28 +42,21 @@ controller:
           cpu: "100m"
           memory: "128Mi"
 
-  initContainerResources:
-    requests:
-      cpu: "50m"
-      memory: "64Mi"
-    limits:
-      cpu: "100m"
-      memory: "128Mi"
   persistence:
     enabled: true
     storageClass: "gp2"
-    size: "8Gi"
     accessMode: "ReadWriteOnce"
-  resources:
-    requests:
-      cpu: "100m"
-      memory: "128Mi"
-    limits:
-      cpu: "200m"
-      memory: "256Mi"
-  containerSecurityContext:
-    readOnlyRootFilesystem: true
-    allowPrivilegeEscalation: false
+    size: "8Gi"
+
+  installPlugins:
+    - kubernetes:4209.vc646b_71e5269
+    - workflow-aggregator:596.v8c21c963d92d
+    - git:5.2.1
+    - configuration-as-code:1836.vccda_4a_122a_a_e
+    - workflow-multibranch:783.787.v50539468395f
+    - cloudbees-folder:6.928.v7c780211d66e
+    - credentials-binding:687.vcb_e9cf2a_868c
+    - credentials:1389.v80b_b_b_a_492d4a
 
 agent:
   persistentWorkspace: false
