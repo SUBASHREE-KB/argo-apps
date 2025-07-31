@@ -1,9 +1,8 @@
 controller:
   admin:
     password: "admin123"
-
-  tag: "2.454"
   serviceType: LoadBalancer
+  tag: "2.454"  # or latest LTS
 
   podSecurityContext:
     runAsUser: 1000
@@ -14,28 +13,22 @@ controller:
   containerSecurityContext:
     runAsUser: 1000
     allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: false  # Jenkins init requires this to be false
 
-  initContainers:
-    - name: init
-      image: busybox
-      command:
-        - sh
-        - -c
-        - "echo Initializing Jenkins volume..."
-      resources:
-        requests:
-          cpu: "50m"
-          memory: "64Mi"
-        limits:
-          cpu: "100m"
-          memory: "128Mi"
+  # Add resources to avoid Kyverno violations on init containers
+  initContainerResources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "200m"
+      memory: "256Mi"
 
   persistence:
     enabled: true
-    storageClass: "gp2"
-    size: "8Gi"
-    accessMode: "ReadWriteOnce"
+    storageClass: gp2
+    accessMode: ReadWriteOnce
+    size: 8Gi
 
   resources:
     requests:
@@ -48,8 +41,8 @@ controller:
 agent:
   persistentWorkspace: false
   containerSecurityContext:
-    runAsUser: 1000
     allowPrivilegeEscalation: false
+    runAsUser: 1000
     seccompProfile:
       type: RuntimeDefault
   resources:
