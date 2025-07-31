@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://charts.jenkins.io
     chart: jenkins
-    targetRevision: 5.7.0  # Updated to a version supporting Jenkins 2.452.1 or higher
+    targetRevision: latest
     helm:
       valueFiles:
         - values.yaml
