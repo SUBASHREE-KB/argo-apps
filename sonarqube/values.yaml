@@ -20,6 +20,9 @@ containerSecurityContext:
 
 postgresql:
   enabled: true
+  storageClass: gp2
+  accessMode: ReadWriteOnce
+  size: "10Gi"
   auth:
     postgresPassword: "sonar123"
   primary:
