@@ -1,23 +1,6 @@
 service:
   type: LoadBalancer
 
-securityContext:
-  fsGroup: 1000
-
-containerSecurityContext:
-  runAsUser: 1000
-  runAsGroup: 1000
-  allowPrivilegeEscalation: false
-  # Keep readOnlyRootFilesystem: false to prevent init-fs crashes
-  readOnlyRootFilesystem: false
-  seccompProfile:
-    type: RuntimeDefault
-
-initContainers:
-  securityContext:
-    seccompProfile:
-      type: RuntimeDefault
-
 resources:
   requests:
     cpu: "200m"
@@ -26,11 +9,17 @@ resources:
     cpu: "800m"
     memory: "2Gi"
 
+securityContext:
+  fsGroup: 1000
+
+containerSecurityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+
 postgresql:
   enabled: true
-  persistence:
-    size: 8Gi
-    storageClass: gp2
   auth:
     postgresPassword: "sonar123"
   primary:
@@ -41,8 +30,3 @@ postgresql:
       limits:
         cpu: "300m"
         memory: "512Mi"
-    containerSecurityContext:
-      allowPrivilegeEscalation: true
-      runAsUser: 0
-      runAsGroup: 0
-
