@@ -21,7 +21,6 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -50,7 +49,7 @@ spec:
         containerSecurityContext:
           runAsUser: 1000
           runAsGroup: 1000
-          readOnlyRootFilesystem: true
+          readOnlyRootFilesystem: false
           allowPrivilegeEscalation: false
         postgresql:
           enabled: true
@@ -75,10 +74,6 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-
-
-
-
 
 
 ---
