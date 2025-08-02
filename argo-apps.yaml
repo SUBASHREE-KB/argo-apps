@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://charts.jenkins.io
     chart: jenkins
-    targetRevision: "5.8.73"
+    targetRevision: "5.8.73"  # Latest release supporting Jenkins 2.516.1-jdk21 :contentReference[oaicite:2]{index=2}
     helm:
       valueFiles:
         - values.yaml
@@ -21,6 +21,7 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+
 
 
 

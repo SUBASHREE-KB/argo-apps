@@ -2,39 +2,21 @@ apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
   name: require-resource-limits
-  annotations:
-    policies.kyverno.io/title: Require Resource Limits
-    policies.kyverno.io/category: Best Practices
-    policies.kyverno.io/severity: medium
-    policies.kyverno.io/description: >-
-      CPU and memory limits must be set for all containers.
 spec:
-  validationFailureAction: Audit
+  validationFailureAction: enforce
   background: true
   rules:
     - name: check-resource-limits
       match:
-        any:
-        - resources:
-            kinds:
-            - Pod
-      exclude:
-        any:
-        - resources:
-            kinds:
-            - Pod
-            namespaces:
-            - kube-system
-            - argocd
-            - jenkins  # Added to exclude Jenkins namespace
-            - sonarqube
+        resources:
+          kinds: ["Pod"]
       validate:
-        message: "CPU and memory limits must be set"
+        message: "Both CPU and memory limits must be set on all containers"
         pattern:
           spec:
             containers:
             - name: "*"
               resources:
                 limits:
-                  memory: "?*"
                   cpu: "?*"
+                  memory: "?*"
