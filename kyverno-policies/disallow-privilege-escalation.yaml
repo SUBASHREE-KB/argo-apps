@@ -1,77 +1,20 @@
-controller:
-  admin:
-    password: "admin123"
-  serviceType: LoadBalancer
-  # Ensure older pods are fully removed before upgrading
-  podSecurityContext:
-    enabled: true
-    runAsUser: 1000
-    fsGroup: 1000
-    seccompProfile:
-      type: RuntimeDefault
-
-  containerSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: true
-    seccompProfile:
-      type: RuntimeDefault
-
-  initContainerSecurityContext:
-    enabled: true
-    # This will apply to the `apply_config.sh` init plugin installer
-    runAsNonRoot: false   # still root to write /var/jenkins_home
-    allowPrivilegeEscalation: false
-    seccompProfile:
-      type: RuntimeDefault
-    fsGroup: 1000
-    runAsUser: 0
-
-  sidecars:
-    configAutoReload:
-      containerSecurityContext:
-        enabled: true
-        runAsNonRoot: true
-        allowPrivilegeEscalation: false
-        seccompProfile:
-          type: RuntimeDefault
-
-  image:
-    tag:    "2.516.1-jdk21"   # Jenkins LTS core version ≥ 2.452.1
-  installPlugins:
-    - kubernetes:4358.vcfd9c5a_0a_f51   # ≥ 4209 + matching CASC
-    - credentials:1393.vf1g0b2329c78     # latest secure
-    - credentials-binding:695.vccf945a_0f28
-    - configuration-as-code:1836.vccda_4a_122a_a_e
-    - workflow-aggregator:597.vfcca1e7b_6213
-    - workflow-multibranch:791.vfd7456ff_ac9
-    - cloudbees-folder:7.1.0
-
-  persistence:
-    enabled: true
-    storageClass: gp2
-    accessMode: ReadWriteOnce
-    size: "8Gi"
-
-  resources:
-    requests:
-      cpu: "500m"
-      memory: "512Mi"
-    limits:
-      cpu: "1000m"
-      memory: "1024Mi"
-
-agent:
-  containerSecurityContext:
-    enabled: true
-    allowPrivilegeEscalation: false
-    seccompProfile:
-      type: RuntimeDefault
-  resources:
-    requests:
-      cpu: "100m"
-      memory: "128Mi"
-    limits:
-      cpu: "200m"
-      memory: "256Mi"
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disallow-privilege-escalation
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+    - name: check-priv-esc
+      match:
+        resources:
+          kinds: ["Pod"]
+      validate:
+        message: "Privilege escalation is disallowed"
+        pattern:
+          spec:
+            containers:
+              - name: "*"
+                securityContext:
+                  allowPrivilegeEscalation: false
