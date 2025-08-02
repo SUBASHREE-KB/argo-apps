@@ -15,8 +15,16 @@ securityContext:
 containerSecurityContext:
   runAsUser: 1000
   runAsGroup: 1000
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
+  seccompProfile:
+    type: RuntimeDefault
+initContainers:
+  securityContext:
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: RuntimeDefault
+
 
 postgresql:
   enabled: true
