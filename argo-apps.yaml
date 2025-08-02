@@ -97,7 +97,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kyverno-baseline-policies
+  name: kyverno-policies
   namespace: argocd
 spec:
   project: default
@@ -128,7 +128,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kyverno-custom-policies
+  name: kyverno-policies
   namespace: argocd
 spec:
   project: default
