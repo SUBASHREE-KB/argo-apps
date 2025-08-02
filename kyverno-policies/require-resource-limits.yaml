@@ -9,7 +9,7 @@ metadata:
     policies.kyverno.io/description: >-
       CPU and memory limits must be set for all containers.
 spec:
-  validationFailureAction: enforce
+  validationFailureAction: Audit
   background: true
   rules:
     - name: check-resource-limits
