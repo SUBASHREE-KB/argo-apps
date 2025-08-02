@@ -19,7 +19,7 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
 
 postgresql:
-  enabled: false
+  enabled: true
   auth:
     postgresPassword: "sonar123"
   primary:
