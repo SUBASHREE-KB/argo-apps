@@ -71,6 +71,15 @@ spec:
             containerSecurityContext:
               allowPrivilegeEscalation: false
 
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: sonarqube
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
 
 
 ---
