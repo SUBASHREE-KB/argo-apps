@@ -24,3 +24,10 @@ spec:
               - name: "*"
                 securityContext:
                   readOnlyRootFilesystem: true
+        anyPattern:
+          spec:
+            containers:
+              - name: "*"
+                securityContext:
+                  readOnlyRootFilesystem: true
+
