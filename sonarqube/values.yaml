@@ -28,6 +28,9 @@ resources:
 
 postgresql:
   enabled: true
+  persistence:
+    size: 8Gi
+    storageClass: gp2
   auth:
     postgresPassword: "sonar123"
   primary:
@@ -42,3 +45,4 @@ postgresql:
       allowPrivilegeEscalation: true
       runAsUser: 0
       runAsGroup: 0
+
