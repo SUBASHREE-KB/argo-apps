@@ -50,7 +50,7 @@ spec:
         containerSecurityContext:
           runAsUser: 1000
           runAsGroup: 1000
-          readOnlyRootFilesystem: false
+          readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
         postgresql:
           enabled: true
