@@ -1,22 +1,26 @@
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: require-resource-limits
+  name: enforce-readonly-rootfs
 spec:
   validationFailureAction: enforce
   background: true
   rules:
-    - name: check-resource-limits
+    - name: require-read-only-root-fs
       match:
         resources:
           kinds: ["Pod"]
+      exclude:
+        resources:
+          namespaces:
+            - sonarqube
+          names:
+            - sonarqube-postgresql
       validate:
-        message: "Both CPU and memory limits must be set on all containers"
+        message: "Root filesystem must be read-only"
         pattern:
           spec:
             containers:
-            - name: "*"
-              resources:
-                limits:
-                  cpu: "?*"
-                  memory: "?*"
+              - name: "*"
+                securityContext:
+                  readOnlyRootFilesystem: true
