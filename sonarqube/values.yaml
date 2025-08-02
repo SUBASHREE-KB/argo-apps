@@ -1,24 +1,5 @@
-# sonarqube/values.yaml
 service:
   type: LoadBalancer
-
-# Disable privileged init containers
-initSysctl:
-  enabled: false
-initFs:
-  enabled: false
-
-# Require read‑only root fs
-securityContext:
-  fsGroup: 1000
-
-containerSecurityContext:
-  runAsUser: 1000
-  runAsGroup: 1000
-  readOnlyRootFilesystem: true
-  allowPrivilegeEscalation: false
-  seccompProfile:
-    type: RuntimeDefault
 
 resources:
   requests:
@@ -28,19 +9,20 @@ resources:
     cpu: "800m"
     memory: "2Gi"
 
+securityContext:
+  fsGroup: 1000
+
+containerSecurityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+
 postgresql:
   enabled: true
   auth:
     postgresPassword: "sonar123"
-  # Sub‑chart also honors securityContext
   primary:
-    securityContext:
-      runAsUser: 1001
-      fsGroup: 1001
-      readOnlyRootFilesystem: true
-      allowPrivilegeEscalation: false
-      seccompProfile:
-        type: RuntimeDefault
     resources:
       requests:
         cpu: "100m"
