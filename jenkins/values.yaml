@@ -1,24 +1,24 @@
 controller:
   admin:
     password: "admin123"
-
-  serviceType: LoadBalancer
-
+  tag: "2.516.3"
   podSecurityContext:
+    runAsUser: 1000
+    fsGroup: 1000
     seccompProfile:
       type: RuntimeDefault
-    fsGroup: 1000  # Ensures Jenkins can write to volumes
-    runAsUser: 1000
-    runAsGroup: 1000
 
   containerSecurityContext:
-    readOnlyRootFilesystem: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    readOnlyRootFilesystem: false  # must be false for the init scripts
     allowPrivilegeEscalation: false
 
   initContainerSecurityContext:
-    readOnlyRootFilesystem: false
     runAsUser: 1000
     runAsGroup: 1000
+    fsGroup: 1000
+    readOnlyRootFilesystem: false  # required for plugin-manager writes
 
   resources:
     requests:
@@ -38,6 +38,7 @@ controller:
 
   sidecars:
     configAutoReload:
+      enabled: true
       resources:
         requests:
           cpu: "50m"
@@ -48,28 +49,27 @@ controller:
 
   persistence:
     enabled: true
+    size: "8Gi"
     storageClass: "gp2"
     accessMode: "ReadWriteOnce"
-    size: "8Gi"
 
   installPlugins:
-    - kubernetes:4300.v3a_4b_20a_3807f
-    - workflow-aggregator:600.vb_57d6b_5d6186
-    - git:5.5.0
-    - configuration-as-code:1836.vccda_4a_122a_a_e
-    - workflow-multibranch:790.vf0e485d84a_9e
-    - cloudbees-folder:7.0.0
-    - credentials-binding:694.vf1a_0b_1a_2e66
-    - credentials:1394.v5299747b_8a_3b_
+    - configuration‑as‑code:2038.vcd1f11f_b_42a8c
+    - kubernetes:4358.v3ec59e_494db
+    - workflow‑aggregator:632.v4ba_n61e_fed9_73
+    - git:5.8.0
+    - workflow‑multibranch:811.v36d48a_2b
+    - cloudbees‑folder:7.3.0
+    - credentials‑binding:709.v25da_5c0e8e
+    - credentials:1411.v5299ab7b2ca
 
 agent:
   persistentWorkspace: false
-
   containerSecurityContext:
+    runAsUser: 1000
     allowPrivilegeEscalation: false
     seccompProfile:
       type: RuntimeDefault
-
   resources:
     requests:
       cpu: "100m"
