@@ -1,9 +1,11 @@
 controller:
   admin:
     password: "admin123"
-  tag: "2.516.3"
+  serviceType: LoadBalancer
+
   podSecurityContext:
     runAsUser: 1000
+    runAsGroup: 1000
     fsGroup: 1000
     seccompProfile:
       type: RuntimeDefault
@@ -11,14 +13,19 @@ controller:
   containerSecurityContext:
     runAsUser: 1000
     runAsGroup: 1000
-    readOnlyRootFilesystem: false  # must be false for the init scripts
+    readOnlyRootFilesystem: false   # Must be false to install plugins
     allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
 
   initContainerSecurityContext:
     runAsUser: 1000
     runAsGroup: 1000
     fsGroup: 1000
-    readOnlyRootFilesystem: false  # required for plugin-manager writes
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: true   # Init container needs extras
+    seccompProfile:
+      type: RuntimeDefault
 
   resources:
     requests:
@@ -49,18 +56,18 @@ controller:
 
   persistence:
     enabled: true
-    size: "8Gi"
     storageClass: "gp2"
     accessMode: "ReadWriteOnce"
+    size: "8Gi"
 
   installPlugins:
-    - configuration‑as‑code:2038.vcd1f11f_b_42a8c
+    - configuration-as-code:2038.vcd1f11f_b_42a8c
     - kubernetes:4358.v3ec59e_494db
-    - workflow‑aggregator:632.v4ba_n61e_fed9_73
+    - workflow-aggregator:632.v4ba_n61e_fed9_73
     - git:5.8.0
-    - workflow‑multibranch:811.v36d48a_2b
-    - cloudbees‑folder:7.3.0
-    - credentials‑binding:709.v25da_5c0e8e
+    - workflow-multibranch:811.v36d48a_2b
+    - cloudbees-folder:7.3.0
+    - credentials-binding:709.v25da_5c0e8e
     - credentials:1411.v5299ab7b2ca
 
 agent:
@@ -70,10 +77,3 @@ agent:
     allowPrivilegeEscalation: false
     seccompProfile:
       type: RuntimeDefault
-  resources:
-    requests:
-      cpu: "100m"
-      memory: "128Mi"
-    limits:
-      cpu: "200m"
-      memory: "256Mi"
