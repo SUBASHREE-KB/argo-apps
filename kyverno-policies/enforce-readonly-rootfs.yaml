@@ -3,21 +3,18 @@ kind: ClusterPolicy
 metadata:
   name: enforce-readonly-rootfs
 spec:
-  validationFailureAction: Audit
+  validationFailureAction: enforce
   background: true
   rules:
     - name: require-read-only-root-fs
       match:
         resources:
           kinds: ["Pod"]
-      exclude:
-        resources:
-          namespaces: ["crossplane-system", "kube-system", "kyverno"]
       validate:
         message: "Root filesystem must be read-only"
         pattern:
           spec:
             containers:
-            - name: ""
+            - name: "*"
               securityContext:
                 readOnlyRootFilesystem: true

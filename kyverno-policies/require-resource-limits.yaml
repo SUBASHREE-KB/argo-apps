@@ -3,23 +3,20 @@ kind: ClusterPolicy
 metadata:
   name: require-resource-limits
 spec:
-  validationFailureAction: Audit
+  validationFailureAction: enforce
   background: true
   rules:
     - name: check-resource-limits
       match:
         resources:
           kinds: ["Pod"]
-      exclude:
-        resources:
-          namespaces: ["crossplane-system", "kube-system", "kyverno"]
       validate:
         message: "Both CPU and memory limits must be set on all containers"
         pattern:
           spec:
             containers:
-            - name: ""
+            - name: "*"
               resources:
                 limits:
-                  cpu: "?"
-                  memory: "?"
+                  cpu: "?*"
+                  memory: "?*"
