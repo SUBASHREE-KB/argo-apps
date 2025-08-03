@@ -1,0 +1,28 @@
+apiVersion: kyverno.io/v1
+kind: PolicyException
+metadata:
+  name: crossplane-provider-exception
+  namespace: kyverno
+spec:
+  exceptions:
+  - policyName: "enforce-readonly-rootfs"
+    ruleNames:
+    - "*"
+  - policyName: "require-resource-limits"
+    ruleNames:
+    - "*"
+  match:
+  - any:
+    - resources:
+        kinds:
+        - Deployment
+        namespaces:
+        - crossplane-system
+        names:
+        - "provider-aws-*"
+  - any:
+    - resources:
+        kinds:
+        - Pod
+        namespaces:
+        - crossplane-system
